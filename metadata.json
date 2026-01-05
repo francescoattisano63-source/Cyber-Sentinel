@@ -1,0 +1,8 @@
+{
+  "name": "Cyber Sentinel v1.0",
+  "description": "A luxury SaaS cybersecurity platform for SMEs based on the NIST CSF 2.0 framework, featuring automated scanning, OSINT analysis, and real-time telemetry.",
+  "requestFramePermissions": [
+    "geolocation",
+    "microphone"
+  ]
+}
