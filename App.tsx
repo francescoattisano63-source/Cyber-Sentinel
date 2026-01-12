@@ -46,7 +46,6 @@ const AppContent: React.FC = () => {
   const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
   const [nistValues, setNistValues] = useState<number[]>([40, 55, 30, 45, 20]);
 
-  // Missing state for Kore chat
   const [textInput, setTextInput] = useState('');
   const [chatHistory, setChatHistory] = useState<{role: 'user' | 'model', text: string}[]>([]);
   const [isLiveActive, setIsLiveActive] = useState(false);
@@ -68,19 +67,19 @@ const AppContent: React.FC = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `Sentinel_Intelligence_${targetUrl.replace(/https?:\/\//, '')}.md`;
+    a.download = `Sentinel_v1.1.0_Report_${targetUrl.replace(/https?:\/\//, '')}.md`;
     a.click();
-    notify("Intelligence Report scaricato", "success");
+    notify("Intelligence Report v1.1.0 scaricato", "success");
   };
 
   const handleRunScan = async () => {
     if (isScanning || !user || user.credits <= 0) return;
     setTerminalLogs([]);
     setScanningTasks({ headers: true, osint: true, telemetry: true, ai: true });
-    notify("Innesco Protocollo Neural Scan...", 'info');
+    notify("Innesco Protocollo Neural Scan v1.1.0...", 'info');
 
     try {
-      addLog("INIT: Aggancio canali di intelligence...");
+      addLog("INIT: Aggancio canali di intelligence v1.1.0...");
       const h = await analyzeSecurityHeaders(targetUrl);
       setHeaders(h);
       addLog("ENG: Analisi Header HTTP completata.");
@@ -116,7 +115,7 @@ const AppContent: React.FC = () => {
       saveScan(scan);
       decrementCredits();
       incrementScans();
-      notify("Audit Globale Completato", "success");
+      notify("Audit Globale v1.1.0 Completato", "success");
     } catch (e) {
       notify("Falla nel kernel di scansione", "alert");
     } finally {
@@ -130,7 +129,7 @@ const AppContent: React.FC = () => {
     setChatHistory(prev => [...prev, { role: 'user', text: q }]);
     setTextInput('');
     try {
-      const context = `L'utente ha una postura di sicurezza del ${currentScore}%. Target: ${targetUrl}. Breaches: ${breaches.length}.`;
+      const context = `L'utente ha una postura di sicurezza del ${currentScore}%. Target: ${targetUrl}. Breaches: ${breaches.length}. Versione App: 1.1.0 Stable.`;
       const ans = await askKoreWithRAG(q, context);
       setChatHistory(prev => [...prev, { role: 'model', text: ans }]);
     } catch (e) {
@@ -147,7 +146,7 @@ const AppContent: React.FC = () => {
       <aside className="no-print w-24 lg:w-72 border-r border-white/5 flex flex-col glass z-[100] sticky top-0 h-screen">
         <div className="p-10 text-center">
           <h1 className="text-xl font-black text-emerald italic tracking-tighter">CYBER SENTINEL</h1>
-          <p className="text-[8px] text-white/30 uppercase tracking-widest mt-2">{user.tier} CLEARANCE</p>
+          <p className="text-[8px] text-white/30 uppercase tracking-widest mt-2">{user.tier} CLEARANCE v1.1.0</p>
         </div>
         <nav className="flex-1 px-4 space-y-2">
           {[
@@ -175,7 +174,7 @@ const AppContent: React.FC = () => {
         <header className="no-print px-10 py-12 flex justify-between items-center bg-obsidian/60 backdrop-blur-2xl sticky top-0 z-[60] border-b border-white/5">
            <div className="flex flex-col">
               <h2 className="text-4xl font-black uppercase tracking-tighter italic">{activeTab}</h2>
-              {isScanning && <div className="text-[10px] text-gold animate-pulse font-black mt-2 tracking-widest uppercase">Deep Audit in Progress...</div>}
+              {isScanning && <div className="text-[10px] text-gold animate-pulse font-black mt-2 tracking-widest uppercase">Deep Audit v1.1.0 in Progress...</div>}
            </div>
            <div className="flex items-center gap-6">
              <div className="text-right">
@@ -207,7 +206,7 @@ const AppContent: React.FC = () => {
 
                 <DashboardCard title="Strategic Intelligence" subtitle="Neural Synthesis by Kore" icon="fa-brain">
                    <div className="flex justify-between items-center mb-8 bg-white/5 p-4 rounded-2xl border border-white/5">
-                      <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.4em]">Audit Assessment v2.0</span>
+                      <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.4em]">Audit Assessment v1.1.0</span>
                       {aiReport && (
                         <button onClick={downloadReport} className="text-emerald hover:text-white transition-colors flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-emerald/10 px-5 py-2.5 rounded-xl border border-emerald/20">
                           <i className="fas fa-download"></i> Export Intelligence
@@ -215,7 +214,7 @@ const AppContent: React.FC = () => {
                       )}
                    </div>
                    <div className="p-10 bg-black/40 rounded-[2.5rem] text-sm leading-relaxed text-white/80 border border-white/5 min-h-[300px] prose prose-invert max-w-none whitespace-pre-wrap font-medium">
-                      {aiReport ? aiReport : (isScanning ? "Processing attack vectors..." : "Avvia l'audit per generare l'analisi dei rischi strategici.")}
+                      {aiReport ? aiReport : (isScanning ? "Processing attack vectors..." : "Avvia l'audit per generare l'analisi dei rischi strategici v1.1.0.")}
                    </div>
                    <div className="mt-10">
                       <TechnicalView headers={headers} breaches={breaches} language="IT" />
@@ -259,7 +258,7 @@ const AppContent: React.FC = () => {
                     <div className="w-16 h-16 rounded-2xl bg-emerald/10 border border-emerald/20 flex items-center justify-center text-emerald">
                        <i className="fas fa-history text-2xl"></i>
                     </div>
-                    <h3 className="text-3xl font-black uppercase tracking-tighter italic">Temporal Records</h3>
+                    <h3 className="text-3xl font-black uppercase tracking-tighter italic">Temporal Records v1.1.0</h3>
                  </div>
                  <div className="text-right">
                     <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Snapshots Collected</p>
@@ -270,7 +269,7 @@ const AppContent: React.FC = () => {
               {scanHistory.length === 0 ? (
                 <div className="p-32 glass rounded-[4rem] text-center border-dashed border-2 border-white/5 opacity-50">
                    <i className="fas fa-database text-6xl mb-6"></i>
-                   <p className="text-sm font-black uppercase tracking-[0.4em]">Nessun audit registrato nello storico.</p>
+                   <p className="text-sm font-black uppercase tracking-[0.4em]">Nessun audit registrato nello storico v1.1.0.</p>
                 </div>
               ) : (
                 <div className="grid gap-6">
@@ -307,7 +306,7 @@ const AppContent: React.FC = () => {
                {!capabilities.hasForensics && (
                  <div className="absolute inset-0 bg-obsidian/60 backdrop-blur-2xl z-[110] rounded-[4rem] flex flex-col items-center justify-center p-12 text-center border border-white/10">
                     <i className="fas fa-lock text-5xl text-emerald mb-8 shadow-emerald/50"></i>
-                    <h3 className="text-4xl font-black uppercase mb-4 italic tracking-tighter">Active Defense Access Restricted</h3>
+                    <h3 className="text-4xl font-black uppercase mb-4 italic tracking-tighter">Active Defense Restricted v1.1.0</h3>
                     <p className="text-white/40 text-sm mb-10 max-w-md leading-relaxed">Il monitoraggio agenti EDR e la telemetria SIEM in tempo reale richiedono un upgrade alla Clearance GOLD o superiore.</p>
                     <button onClick={() => updateTier(SubscriptionTier.GOLD)} className="bg-emerald text-black px-16 py-6 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-emerald/20 hover:scale-105 transition-all">Sblocca Moduli Forensics</button>
                  </div>
@@ -352,7 +351,7 @@ const AppContent: React.FC = () => {
               <div className="col-span-12 lg:col-span-4 glass p-12 rounded-[4rem] flex flex-col items-center justify-center text-center relative overflow-hidden">
                  <div className="absolute inset-0 bg-emerald/5 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(16, 185, 129, 0.4) 1px, transparent 0)', backgroundSize: '20px 20px' }}></div>
                  <NeuralAtom active={isLiveActive || isCisoSpeaking} color={isCisoSpeaking ? '#10b981' : '#ffffff'} />
-                 <h3 className="text-3xl font-black uppercase mt-10 italic tracking-tighter">Kore Intelligence</h3>
+                 <h3 className="text-3xl font-black uppercase mt-10 italic tracking-tighter">Kore Intelligence v1.1.0</h3>
                  <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mt-2 mb-10 italic">Neural Knowledge: v2.0-RAG-ENABLED</p>
                  <button onClick={() => notify("Kore Voice Link abilitato in Gold", "info")} className={`px-12 py-6 rounded-2xl bg-emerald text-black font-black uppercase text-xs tracking-widest shadow-xl shadow-emerald/20 hover:scale-105 transition-all`}>
                    ESTABLISH VOICE LINK
