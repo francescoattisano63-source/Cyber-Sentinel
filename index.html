@@ -4,16 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Sentinel v1.0 | Elite Cybersecurity</title>
+    <title>Cyber Sentinel v1.0 | Tactical Intelligence Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&display=swap');
         
         :root {
-            --obsidian: #02070d;
+            --obsidian: #010409;
             --emerald: #10b981;
-            --gold: #FFD700;
+            --emerald-glow: rgba(16, 185, 129, 0.4);
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -22,73 +26,60 @@
             color: #ffffff;
             margin: 0;
             overflow-x: hidden;
-            background-image: url('https://www.transparenttextures.com/patterns/grid-me.png');
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+                url('https://www.transparenttextures.com/patterns/grid-me.png');
+            background-attachment: fixed;
         }
 
         .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Stili per la Stampa Professionale */
-        @media print {
-            @page {
-                margin: 20mm;
-                size: A4;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-                background-image: none !important;
-            }
-            #root > div {
-                display: block !important;
-            }
-            aside, header, .no-print, button, .sidebar-link, nav {
-                display: none !important;
-            }
-            main {
-                margin: 0 !important;
-                padding: 0 !important;
-                display: block !important;
-            }
-            #printable-report {
-                visibility: visible !important;
-                display: block !important;
-                position: static !important;
-                width: 100% !important;
-                color: black !important;
-                background: white !important;
-                font-family: serif; /* Più leggibile in stampa */
-                line-height: 1.6;
-            }
-            #printable-report h1, #printable-report h2, #printable-report h3 {
-                color: black !important;
-                margin-top: 20px;
-                border-bottom: 1px solid #eee;
-            }
-            .glass {
-                background: transparent !important;
-                border: none !important;
-                backdrop-filter: none !important;
-            }
+        .glass:hover {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-2px);
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .animate-luxe {
+            animation: slideInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.5); }
+        ::-webkit-scrollbar-track { background: var(--obsidian); }
+        ::-webkit-scrollbar-thumb { 
+            background: var(--emerald); 
+            border-radius: 10px; 
+        }
+
+        .cyber-card { position: relative; overflow: hidden; }
+        .cyber-card::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(16, 185, 129, 0.05), transparent);
+            transform: skewX(-25deg); transition: 0.75s;
+        }
+        .cyber-card:hover::after { left: 150%; }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; }
+        }
     </style>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        obsidian: '#02070d',
-                        emerald: '#10b981',
-                        gold: '#FFD700',
-                    }
+                    colors: { obsidian: '#010409', emerald: '#10b981' }
                 }
             }
         }

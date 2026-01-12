@@ -13,7 +13,7 @@ export interface User {
   credits: number;
   tier: SubscriptionTier;
   scansPerformed: number;
-  nextScanDate?: string;
+  assets?: string[]; // Per multi-tenancy
 }
 
 export interface SecurityHeaderResult {
@@ -21,6 +21,14 @@ export interface SecurityHeaderResult {
   value: string | null;
   status: 'secure' | 'vulnerable' | 'warning';
   description: string;
+}
+
+export interface ComplianceRequirement {
+  id: string;
+  category: string;
+  requirement: string;
+  status: 'passed' | 'failed';
+  linkedVulnerability?: string;
 }
 
 export interface ScanResult {
@@ -32,6 +40,7 @@ export interface ScanResult {
   breaches: EmailBreach[];
   nistScores: number[];
   aiReport: string;
+  complianceRoadmap?: ComplianceRequirement[];
 }
 
 export interface WazuhAgent {
@@ -43,6 +52,7 @@ export interface WazuhAgent {
 }
 
 export interface EmailBreach {
+  email: string;
   site: string;
   date: string;
   dataClasses: string[];

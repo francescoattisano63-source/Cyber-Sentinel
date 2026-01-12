@@ -1,15 +1,18 @@
 
 import React from 'react';
 
-export const NeuralAtom: React.FC<{ active?: boolean }> = ({ active = true }) => {
+export const NeuralAtom: React.FC<{ active?: boolean; color?: string }> = ({ active = true, color = '#10b981' }) => {
   return (
     <div className={`relative flex items-center justify-center w-64 h-64 mx-auto perspective-1000 ${active ? 'opacity-100' : 'opacity-20'}`}>
       {/* Nucleo */}
-      <div className={`absolute w-8 h-8 rounded-full bg-emerald shadow-[0_0_30px_#10b981] z-20 transition-all duration-1000 ${active ? 'animate-pulse scale-110' : 'scale-75'}`}></div>
+      <div 
+        className={`absolute w-8 h-8 rounded-full z-20 transition-all duration-1000 ${active ? 'animate-pulse scale-110' : 'scale-75'}`}
+        style={{ backgroundColor: color, boxShadow: `0 0 30px ${color}` }}
+      ></div>
       
       {/* Orbite */}
-      <div className="absolute inset-0 border-2 border-emerald/10 rounded-full animate-[spin_3s_linear_infinite] rotate-x-45 rotate-y-45">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-emerald shadow-[0_0_15px_#10b981]"></div>
+      <div className="absolute inset-0 border-2 rounded-full animate-[spin_3s_linear_infinite] rotate-x-45 rotate-y-45" style={{ borderColor: `${color}22` }}>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 15px ${color}` }}></div>
       </div>
       
       <div className="absolute inset-0 border-2 border-gold/10 rounded-full animate-[spin_4s_linear_infinite_reverse] rotate-x-60 rotate-y--30">
@@ -21,7 +24,7 @@ export const NeuralAtom: React.FC<{ active?: boolean }> = ({ active = true }) =>
       </div>
 
       {/* Glow Effects */}
-      <div className="absolute inset-0 bg-emerald/5 blur-[80px] rounded-full"></div>
+      <div className="absolute inset-0 blur-[80px] rounded-full opacity-20" style={{ backgroundColor: color }}></div>
       
       <style>{`
         .rotate-x-45 { transform: rotateX(45deg); }

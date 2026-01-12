@@ -5,45 +5,27 @@ const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const generateExecutiveReport = async (scanData: any, language: 'IT' | 'EN' = 'IT') => {
   const ai = getAI();
-  const currentDate = new Date().toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
-  
-  const prompt = `Agisci come un consulente senior di cybersecurity. Genera un "Rapporto Strategico di Sicurezza" aggiornato al ${currentDate}.
-  
-  DATI TECNICI DA ANALIZZARE:
-  ${JSON.stringify(scanData)}
-  
-  REQUISITI MANDATORI:
-  1. DATA: Scrivi chiaramente che il report è datato ${currentDate}.
-  2. LINGUAGGIO: Semplice, per un imprenditore (Omega Gruppo).
-  3. EXECUTIVE SUMMARY: Massimo 3 righe.
-  4. PIANO D'AZIONE: 3 passi pratici.
-  5. FORMATO: Markdown.
-  
-  Lingua: ${language === 'IT' ? 'Italiano' : 'Inglese'}.`;
+  const prompt = `Sei un CISO esperto. Analizza i dati e genera un report Markdown professionale. 
+  Includi: Executive Summary, Analisi dei Rischi, Roadmap di Mitigazione.
+  Dati: ${JSON.stringify(scanData)}`;
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
+      model: 'gemini-3-flash-preview',
       contents: prompt,
     });
     return response.text;
   } catch (error) {
-    return "Errore nella generazione del report IA. Si prega di riprovare.";
+    return "Errore nella generazione del report.";
   }
 };
 
-export const generateCompliancePolicy = async (policyType: string, scanData: any, language: 'IT' | 'EN' = 'IT') => {
+export const generateComplianceRoadmap = async (headers: any[]) => {
   const ai = getAI();
-  const prompt = `Crea una bozza professionale di policy ${policyType} basata su questi dati aziendali: ${JSON.stringify(scanData)}. Tono formale, formato Markdown. Lingua: ${language === 'IT' ? 'Italiano' : 'Inglese'}.`;
-  try {
-    const response = await ai.models.generateContent({ model: 'gemini-3-flash-preview', contents: prompt });
-    return response.text;
-  } catch (error) { return "Errore generazione policy."; }
-};
+  const prompt = `Analizza questi header: ${JSON.stringify(headers)}. 
+  Genera una checklist JSON per GDPR e NIST. 
+  Mappa ogni header mancante a un requisito fallito.`;
 
-export const analyzeLogForensics = async (rawLogs: string, language: 'IT' | 'EN' = 'IT') => {
-  const ai = getAI();
-  const prompt = `Analizza questi log e restituisci un verdetto di sicurezza in JSON: ${rawLogs}`;
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -51,24 +33,47 @@ export const analyzeLogForensics = async (rawLogs: string, language: 'IT' | 'EN'
       config: {
         responseMimeType: "application/json",
         responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            findings: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { type: { type: Type.STRING }, description: { type: Type.STRING } } } },
-            severity: { type: Type.STRING },
-            verdict: { type: Type.STRING },
-            remediation: { type: Type.STRING }
-          },
-          required: ["severity", "verdict", "remediation"]
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              id: { type: Type.STRING },
+              category: { type: Type.STRING },
+              requirement: { type: Type.STRING },
+              status: { type: Type.STRING }, // 'passed' | 'failed'
+              linkedVulnerability: { type: Type.STRING }
+            },
+            required: ["id", "category", "requirement", "status"]
+          }
         }
       }
     });
-    return JSON.parse(response.text);
-  } catch (error) { return null; }
+    return JSON.parse(response.text || "[]");
+  } catch (e) {
+    return [];
+  }
 };
 
-export const runThreatSimulation = async (attackType: string, currentPosture: any, language: 'IT' | 'EN' = 'IT') => {
+export const askKoreWithRAG = async (query: string, context: string) => {
   const ai = getAI();
-  const prompt = `Simula un attacco ${attackType} in JSON.`;
+  const prompt = `BASE DI CONOSCENZA CVE 2025: [Apache Exploit CVE-2024-XXXX, OpenSSL Patch v3.2].
+  QUERY UTENTE: ${query}
+  CONTESTO SISTEMA: ${context}
+  Rispondi come Kore, l'assistente IA di Cyber Sentinel. Sii tecnico e preciso.`;
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-pro-preview',
+    contents: prompt
+  });
+  return response.text;
+};
+
+// Fix: Exporting runThreatSimulation to resolve the import error in ThreatSimulator.tsx
+export const runThreatSimulation = async (type: string, posture: any, language: 'IT' | 'EN' = 'IT') => {
+  const ai = getAI();
+  const prompt = `Simula un attacco di tipo ${type} basandoti sulla postura di sicurezza: ${JSON.stringify(posture)}.
+  Genera un JSON con scenarioTitle, steps (array di {time, event, impact}), defensiveVerdict, e mitigationTip.`;
+
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -79,13 +84,27 @@ export const runThreatSimulation = async (attackType: string, currentPosture: an
           type: Type.OBJECT,
           properties: {
             scenarioTitle: { type: Type.STRING },
-            steps: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { time: { type: Type.STRING }, event: { type: Type.STRING }, impact: { type: Type.STRING } } } },
+            steps: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  time: { type: Type.STRING },
+                  event: { type: Type.STRING },
+                  impact: { type: Type.STRING }
+                },
+                required: ["time", "event", "impact"]
+              }
+            },
             defensiveVerdict: { type: Type.STRING },
             mitigationTip: { type: Type.STRING }
-          }
+          },
+          required: ["scenarioTitle", "steps", "defensiveVerdict", "mitigationTip"]
         }
       }
     });
-    return JSON.parse(response.text);
-  } catch (error) { return null; }
+    return JSON.parse(response.text || "{}");
+  } catch (e) {
+    return null;
+  }
 };

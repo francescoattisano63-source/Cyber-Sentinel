@@ -12,22 +12,23 @@ interface DashboardCardProps {
 
 export const DashboardCard: React.FC<DashboardCardProps> = ({ title, subtitle, icon, children, className = '', isGold = false }) => {
   return (
-    <div className={`glass rounded-[2rem] p-10 transition-all duration-500 hover:border-emerald/40 hover:bg-white/[0.06] group shadow-2xl ${className}`}>
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-5">
-          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border ${isGold ? 'bg-gold/10 border-gold/30' : 'bg-emerald/10 border-emerald/30'}`}>
+    <div className={`glass rounded-[2.5rem] p-8 md:p-10 cyber-card flex flex-col h-full ${className}`}>
+      <div className="flex items-center justify-between mb-10">
+        <div className="flex items-center gap-6">
+          <div className={`w-16 h-16 rounded-[1.25rem] flex items-center justify-center border transition-transform duration-500 group-hover:scale-110 ${isGold ? 'bg-gold/5 border-gold/20 shadow-[0_0_20px_rgba(255,215,0,0.1)]' : 'bg-emerald/5 border-emerald/20 shadow-[0_0_20px_rgba(16,185,129,0.1)]'}`}>
             <i className={`fas ${icon} ${isGold ? 'text-gold' : 'text-emerald'} text-2xl`}></i>
           </div>
           <div>
-            <h3 className="text-xl font-black text-white uppercase tracking-widest">{title}</h3>
-            {subtitle && <p className="text-sm text-white/60 font-medium mt-1">{subtitle}</p>}
+            <h3 className="text-xl font-black text-white uppercase tracking-tighter leading-none">{title}</h3>
+            {subtitle && <p className="text-[10px] text-white/40 font-black uppercase tracking-[0.2em] mt-2">{subtitle}</p>}
           </div>
         </div>
-        <button className="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center transition-all">
-          <i className="fas fa-ellipsis-h text-white/30"></i>
-        </button>
+        <div className="flex gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-white/10"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-white/10"></div>
+        </div>
       </div>
-      <div className="text-white">
+      <div className="flex-1">
         {children}
       </div>
     </div>
