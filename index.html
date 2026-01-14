@@ -4,31 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Sentinel v1.0 | Tactical Intelligence Platform</title>
-    <!-- Tailwind via CDN per massima velocità di caricamento e zero dipendenze locali -->
+    <title>Cyber Sentinel v1.1.0 | Tactical Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&display=swap');
+        
         :root {
             --obsidian: #010409;
             --emerald: #10b981;
+            --gold: #fbbf24;
         }
+
         body {
             font-family: 'Space Grotesk', sans-serif;
             background-color: var(--obsidian);
             color: #ffffff;
             margin: 0;
-            background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
-            background-attachment: fixed;
+            overflow-x: hidden;
         }
+
         .glass {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--emerald); border-radius: 10px; }
+
+        /* Correzione per scrollbar e glitch grafici */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--obsidian); }
+        ::-webkit-scrollbar-thumb { background: var(--emerald); border-radius: 10px; }
+        
+        /* Prevenzione clipping dashboard */
+        main { position: relative; z-index: 1; }
     </style>
 <script type="importmap">
 {
@@ -45,7 +53,6 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Vite entry point -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>

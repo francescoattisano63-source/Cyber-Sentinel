@@ -4,14 +4,26 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './', // Percorsi relativi per funzionare su qualsiasi sottodominio o cartella
+  base: './',
   define: {
-    'process.env.API_KEY': JSON.stringify(process.env.API_KEY || '')
+    // Espone la chiave sia come process.env che come variabile globale se disponibile
+    'process.env.API_KEY': JSON.stringify(process.env.API_KEY || ''),
   },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false,
     minify: 'terser',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          genai: ['@google/genai']
+        }
+      }
+    }
+  },
+  server: {
+    port: 3000,
+    strictPort: true
   }
 });
