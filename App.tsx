@@ -1,7 +1,6 @@
 
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { GoogleGenAI, Modality, LiveServerMessage } from '@google/genai';
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 import { SecurityHeaderResult, EmailBreach, WazuhAgent, SubscriptionTier, ScanResult, ComplianceRequirement } from './types';
 import { DashboardCard } from './components/DashboardCard';
 import { NeuralAtom } from './components/NeuralAtom';
@@ -26,7 +25,6 @@ import { decodeAudio, decodeAudioData, createBlob } from './services/audioServic
 import { AuthPage } from './components/AuthPage';
 import { LandingPage } from './components/LandingPage';
 import { TIERS_CONFIG } from './constants';
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
 const AppContent: React.FC = () => {
   const { user, loading, scanHistory, saveScan, decrementCredits, incrementScans, signOut, updateTier } = useUser();
