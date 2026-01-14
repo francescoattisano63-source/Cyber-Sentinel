@@ -5,51 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cyber Sentinel v1.0 | Tactical Intelligence Platform</title>
+    <!-- Tailwind via CDN per massima velocità di caricamento e zero dipendenze locali -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&display=swap');
-        
         :root {
             --obsidian: #010409;
             --emerald: #10b981;
-            --emerald-glow: rgba(16, 185, 129, 0.4);
         }
-
-        html { scroll-behavior: smooth; }
-
         body {
             font-family: 'Space Grotesk', sans-serif;
             background-color: var(--obsidian);
             color: #ffffff;
             margin: 0;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
-                url('https://www.transparenttextures.com/patterns/grid-me.png');
+            background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
             background-attachment: fixed;
         }
-
         .glass {
             background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(30px);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-
-        .cyber-card { position: relative; overflow: hidden; }
-        
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: var(--obsidian); }
-        ::-webkit-scrollbar-thumb { 
-            background: var(--emerald); 
-            border-radius: 10px; 
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--emerald); border-radius: 10px; }
     </style>
-    <script>
-        // Setup globale per variabili d'ambiente in fase di runtime
-        window.process = { env: { API_KEY: "" } };
-    </script>
 <script type="importmap">
 {
   "imports": {
@@ -65,7 +45,7 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Vite userà questo riferimento per compilare tutto il progetto -->
+    <!-- Vite entry point -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
