@@ -6,13 +6,22 @@ export default defineConfig({
   plugins: [react()],
   base: '/',
   define: {
+    // Iniezione esplicita per il browser
     'process.env.API_KEY': JSON.stringify(process.env.API_KEY || ''),
   },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
     minify: 'terser',
-    sourcemap: false
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          genai: ['@google/genai']
+        }
+      }
+    }
   },
   server: {
     port: 3000,

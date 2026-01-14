@@ -1,28 +1,39 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Sistema di recupero chiave multi-strato (standard, Vite, o window)
-const getApiKey = () => {
-  const key = process.env.API_KEY || (import.meta as any).env?.VITE_API_KEY || "";
-  if (!key) console.error("FATAL: API_KEY non trovata nell'ambiente.");
-  return key;
+/**
+ * Recupera la chiave API in modo ultra-resiliente per ambienti browser/Vite/Vercel
+ */
+const getApiKey = (): string => {
+  // 1. Prova process.env (iniettato da Vite define)
+  if (typeof process !== 'undefined' && process.env?.API_KEY) return process.env.API_KEY;
+  
+  // 2. Prova import.meta.env (standard Vite)
+  const metaEnv = (import.meta as any).env;
+  if (metaEnv?.VITE_API_KEY) return metaEnv.VITE_API_KEY;
+  if (metaEnv?.API_KEY) return metaEnv.API_KEY;
+
+  // 3. Fallback per debug (non loggare mai la chiave reale in produzione)
+  console.error("AI CONFIG ERROR: API_KEY non rilevata nel runtime.");
+  return "";
 };
 
 export const generateExecutiveReport = async (scanData: any) => {
   const apiKey = getApiKey();
-  if (!apiKey) return "ERRORE: API_KEY non configurata. Inseriscila nelle impostazioni del provider.";
+  if (!apiKey) return "ERRORE DI SISTEMA: Chiave API non trovata. Inserire 'API_KEY' nelle variabili d'ambiente del provider (Vercel/Netlify).";
   
   const ai = new GoogleGenAI({ apiKey });
-  const prompt = `Sei l'IA Cyber Sentinel v1.1.0. Analizza i dati e genera un report tecnico ma leggibile per un CEO. Lingua: Italiano. Dati: ${JSON.stringify(scanData)}`;
+  const prompt = `Agisci come CISO IA. Analizza questi dati e produci un report in Italiano: ${JSON.stringify(scanData)}`;
 
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
     });
-    return response.text;
+    return response.text || "Report generato ma vuoto.";
   } catch (error) {
-    return "Errore critico durante la generazione del report neurale.";
+    console.error("Gemini Error:", error);
+    return "Connessione neurale fallita. Verifica i permessi della chiave API.";
   }
 };
 
@@ -34,7 +45,7 @@ export const generateComplianceRoadmap = async (headers: any[]) => {
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Analizza questi header per conformità GDPR/NIST: ${JSON.stringify(headers)}`,
+      contents: `Genera checklist GDPR in JSON per questi header: ${JSON.stringify(headers)}`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -45,8 +56,7 @@ export const generateComplianceRoadmap = async (headers: any[]) => {
               id: { type: Type.STRING },
               category: { type: Type.STRING },
               requirement: { type: Type.STRING },
-              status: { type: Type.STRING },
-              linkedVulnerability: { type: Type.STRING }
+              status: { type: Type.STRING }
             },
             required: ["id", "category", "requirement", "status"]
           }
@@ -61,17 +71,17 @@ export const generateComplianceRoadmap = async (headers: any[]) => {
 
 export const askKoreWithRAG = async (query: string, context: string) => {
   const apiKey = getApiKey();
-  if (!apiKey) return "Connessione IA non disponibile.";
+  if (!apiKey) return "Servizio IA non configurato.";
   const ai = new GoogleGenAI({ apiKey });
   
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
-      contents: `Contesto: ${context}\nUtente: ${query}`
+      contents: `Contesto: ${context}\nDomanda: ${query}`
     });
-    return response.text;
+    return response.text || "Nessuna risposta ricevuta.";
   } catch (e) {
-    return "Errore di link neurale.";
+    return "Errore di comunicazione con Kore.";
   }
 };
 
@@ -83,7 +93,7 @@ export const runThreatSimulation = async (type: string, posture: any, language: 
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Simula attacco ${type} in lingua ${language} basandoti su: ${JSON.stringify(posture)}`,
+      contents: `Simula attacco ${type} in ${language} su: ${JSON.stringify(posture)}`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {

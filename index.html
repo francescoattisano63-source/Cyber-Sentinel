@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="it" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Sentinel v1.1.0 | Tactical Command</title>
+    <title>Cyber Sentinel v1.1.2 | Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -13,8 +13,8 @@
         :root {
             --obsidian: #010409;
             --emerald: #10b981;
+            --emerald-bright: #34d399;
             --gold: #fbbf24;
-            --red-alert: #ef4444;
         }
 
         body {
@@ -23,47 +23,45 @@
             color: #ffffff;
             margin: 0;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 80%);
-            background-attachment: fixed;
         }
 
-        /* FIX GRAFICA: Assicuriamoci che il vetro sia visibile */
+        /* FIX GRAFICA: Card più visibili */
         .glass {
-            background: rgba(13, 17, 23, 0.7) !important;
+            background: rgba(13, 17, 23, 0.8) !important;
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(16, 185, 129, 0.2) !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
         }
 
-        /* FIX BOTTONI: Devono essere sempre visibili e contrastati */
+        /* FIX BOTTONI: Visibilità assoluta */
         button.bg-emerald {
-            background-color: var(--emerald) !important;
+            background: var(--emerald) !important;
             color: #000000 !important;
             font-weight: 900 !important;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+            text-transform: uppercase !important;
+            letter-spacing: 0.1em !important;
+            border: none !important;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important;
+            cursor: pointer !important;
         }
 
         button.bg-emerald:hover {
-            box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
-            transform: translateY(-2px);
+            background: var(--emerald-bright) !important;
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.5) !important;
         }
 
-        /* FIX LAYOUT: Il pannello di controllo non deve coprire tutto */
+        /* FIX HEADER: Impedisce sovrapposizioni */
         header.sticky {
-            z-index: 50 !important;
-            background: linear-gradient(to bottom, var(--obsidian) 80%, transparent) !important;
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+            background: rgba(1, 4, 9, 0.95) !important;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1) !important;
         }
 
-        /* FIX SCROLLBAR */
-        ::-webkit-scrollbar { width: 6px; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: var(--obsidian); }
         ::-webkit-scrollbar-thumb { background: var(--emerald); border-radius: 10px; }
-        
-        /* Animazioni tattiche */
-        @keyframes sonar {
-            0% { transform: scale(0.9); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
-        }
     </style>
 <script type="importmap">
 {
@@ -80,7 +78,6 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Vite gestirà questo file direttamente senza importmap -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
