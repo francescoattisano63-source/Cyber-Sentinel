@@ -1,36 +1,40 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Standard initialization for @google/genai
-const getAiClient = () => {
-  return new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Sistema di recupero chiave multi-strato (standard, Vite, o window)
+const getApiKey = () => {
+  const key = process.env.API_KEY || (import.meta as any).env?.VITE_API_KEY || "";
+  if (!key) console.error("FATAL: API_KEY non trovata nell'ambiente.");
+  return key;
 };
 
 export const generateExecutiveReport = async (scanData: any) => {
-  const ai = getAiClient();
-  const prompt = `Sei un CISO esperto (Cyber Sentinel IA). Analizza i dati e genera un report Markdown professionale.
-  Dati Scansione: ${JSON.stringify(scanData)}`;
+  const apiKey = getApiKey();
+  if (!apiKey) return "ERRORE: API_KEY non configurata. Inseriscila nelle impostazioni del provider.";
+  
+  const ai = new GoogleGenAI({ apiKey });
+  const prompt = `Sei l'IA Cyber Sentinel v1.1.0. Analizza i dati e genera un report tecnico ma leggibile per un CEO. Lingua: Italiano. Dati: ${JSON.stringify(scanData)}`;
 
   try {
-    // Correct method: ai.models.generateContent with model and contents
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
     });
     return response.text;
   } catch (error) {
-    console.error("AI Generation Error:", error);
-    return "Errore nella generazione neurale del report.";
+    return "Errore critico durante la generazione del report neurale.";
   }
 };
 
 export const generateComplianceRoadmap = async (headers: any[]) => {
-  const ai = getAiClient();
+  const apiKey = getApiKey();
+  if (!apiKey) return [];
+  const ai = new GoogleGenAI({ apiKey });
   
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Analizza questi header: ${JSON.stringify(headers)}. Genera checklist JSON per GDPR/NIST.`,
+      contents: `Analizza questi header per conformità GDPR/NIST: ${JSON.stringify(headers)}`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -56,7 +60,9 @@ export const generateComplianceRoadmap = async (headers: any[]) => {
 };
 
 export const askKoreWithRAG = async (query: string, context: string) => {
-  const ai = getAiClient();
+  const apiKey = getApiKey();
+  if (!apiKey) return "Connessione IA non disponibile.";
+  const ai = new GoogleGenAI({ apiKey });
   
   try {
     const response = await ai.models.generateContent({
@@ -65,20 +71,19 @@ export const askKoreWithRAG = async (query: string, context: string) => {
     });
     return response.text;
   } catch (e) {
-    return "Connessione neurale fallita.";
+    return "Errore di link neurale.";
   }
 };
 
-/**
- * Fix: Added language parameter to match usage in ThreatSimulator.tsx
- */
 export const runThreatSimulation = async (type: string, posture: any, language: 'IT' | 'EN') => {
-  const ai = getAiClient();
+  const apiKey = getApiKey();
+  if (!apiKey) return null;
+  const ai = new GoogleGenAI({ apiKey });
 
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Simula attacco ${type} su postura: ${JSON.stringify(posture)}. Rispondi in lingua: ${language}`,
+      contents: `Simula attacco ${type} in lingua ${language} basandoti su: ${JSON.stringify(posture)}`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {

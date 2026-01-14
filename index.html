@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Sentinel v1.1.0 | Tactical Intelligence</title>
+    <title>Cyber Sentinel v1.1.0 | Tactical Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -14,6 +14,7 @@
             --obsidian: #010409;
             --emerald: #10b981;
             --gold: #fbbf24;
+            --red-alert: #ef4444;
         }
 
         body {
@@ -22,21 +23,47 @@
             color: #ffffff;
             margin: 0;
             overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 80%);
+            background-attachment: fixed;
         }
 
+        /* FIX GRAFICA: Assicuriamoci che il vetro sia visibile */
         .glass {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(13, 17, 23, 0.7) !important;
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
 
-        /* Correzione per scrollbar e glitch grafici */
-        ::-webkit-scrollbar { width: 4px; }
+        /* FIX BOTTONI: Devono essere sempre visibili e contrastati */
+        button.bg-emerald {
+            background-color: var(--emerald) !important;
+            color: #000000 !important;
+            font-weight: 900 !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        button.bg-emerald:hover {
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* FIX LAYOUT: Il pannello di controllo non deve coprire tutto */
+        header.sticky {
+            z-index: 50 !important;
+            background: linear-gradient(to bottom, var(--obsidian) 80%, transparent) !important;
+        }
+
+        /* FIX SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--obsidian); }
         ::-webkit-scrollbar-thumb { background: var(--emerald); border-radius: 10px; }
         
-        /* Prevenzione clipping dashboard */
-        main { position: relative; z-index: 1; }
+        /* Animazioni tattiche */
+        @keyframes sonar {
+            0% { transform: scale(0.9); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
     </style>
 <script type="importmap">
 {
@@ -53,6 +80,7 @@
 </head>
 <body>
     <div id="root"></div>
+    <!-- Vite gestirà questo file direttamente senza importmap -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
