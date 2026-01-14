@@ -16,9 +16,7 @@
             --emerald-glow: rgba(16, 185, 129, 0.4);
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Space Grotesk', sans-serif;
@@ -37,64 +35,37 @@
             backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes slideInUp {
-            from { transform: translateY(40px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .animate-luxe {
-            animation: slideInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
+        .cyber-card { position: relative; overflow: hidden; }
+        
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: var(--obsidian); }
         ::-webkit-scrollbar-thumb { 
             background: var(--emerald); 
             border-radius: 10px; 
         }
-
-        .cyber-card { position: relative; overflow: hidden; }
-        .cyber-card::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(16, 185, 129, 0.05), transparent);
-            transform: skewX(-25deg); transition: 0.75s;
-        }
-        .cyber-card:hover::after { left: 150%; }
-
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white !important; color: black !important; }
-        }
     </style>
     <script>
-        window.process = { env: { API_KEY: "" } }; // Placeholder per evitare errori iniziali
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { obsidian: '#010409', emerald: '#10b981' }
-                }
-            }
-        }
+        // Setup globale per variabili d'ambiente in fase di runtime
+        window.process = { env: { API_KEY: "" } };
     </script>
 <script type="importmap">
 {
   "imports": {
-    "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.35.0"
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
 </head>
 <body>
     <div id="root"></div>
-    <!-- Punto di ingresso critico per Vite -->
+    <!-- Vite userà questo riferimento per compilare tutto il progetto -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
